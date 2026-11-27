@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ProposalKit — AI Proposal &amp; Quote Generator</title>
+<meta name="description" content="Fill in the client, scope and price — get a professional proposal with cover, timeline, pricing and terms, ready to copy, download or print. Interactive demo — sample data only.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a class="brand" href="#">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
+      </span>
+      <span class="brand-name">ProposalKit</span>
+    </a>
+    <nav class="topnav">
+      <a href="#tool">Generator</a>
+      <a href="#how">How it works</a>
+      <span class="demo-badge">Interactive demo</span>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="hero">
+    <p class="eyebrow">AI Proposal &amp; Quote Generator</p>
+    <h1>A proposal that wins the job —<br>written in minutes.</h1>
+    <p class="lede">Fill in the client, the scope and the price. ProposalKit turns it into a professional proposal — cover, scope, timeline, pricing and terms — ready to copy, download or print.</p>
+    <div class="hero-points">
+      <span>Cover to terms in one click</span>
+      <span>Live price math</span>
+      <span>Copy or download .txt / .md</span>
+      <span>Print-ready</span>
+    </div>
+  </section>
+
+  <section class="tool" id="tool">
+    <div class="panel input-panel">
+      <div class="panel-head">
+        <h2>Project details</h2>
+        <span class="panel-hint">Fill in, then generate</span>
+      </div>
+
+      <p class="group-label">Your business</p>
+      <div class="field-row two">
+        <label class="field">
+          <span>Your name</span>
+          <input type="text" id="senderName" value="Aqua Ter" maxlength="80">
+        </label>
+        <label class="field">
+          <span>Business name</span>
+          <input type="text" id="senderBusiness" value="Aqua Ter — Web &amp; AI Services" maxlength="120">
+        </label>
+      </div>
+      <label class="field">
+        <span>Your email</span>
+        <input type="text" id="senderEmail" value="hello@aquaterstudio.example" maxlength="120">
+      </label>
+
+      <p class="group-label">Client &amp; project</p>
+      <div class="field-row two">
+        <label class="field">
+          <span>Client name</span>
+          <input type="text" id="clientName" placeholder="e.g. Marina Cole" maxlength="80">
+        </label>
+        <label class="field">
+          <span>Client company <em>— optional</em></span>
+          <input type="text" id="clientCompany" placeholder="e.g. Marina's Boutique" maxlength="120">
+        </label>
+      </div>
+      <label class="field">
+        <span>Project title</span>
+        <input type="text" id="projectTitle" placeholder="e.g. Online Store Website for Marina's Boutique" maxlength="140">
+      </label>
+      <div class="field-row two">
+        <label class="field">
+          <span>Service type</span>
+          <select id="serviceType">
+            <option value="website">Website / Landing Page</option>
+            <option value="store">Online Store Setup</option>
+            <option value="social">Social Media Management</option>
+            <option value="seo">SEO Articles / Content Writing</option>
+            <option value="admin">Admin, Data &amp; Reports</option>
+            <option value="custom">Custom Project</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Tone</span>
+          <select id="toneSelect">
+            <option value="professional">Professional</option>
+            <option value="friendly">Friendly</option>
+            <option value="concise">Concise</option>
+          </select>
+        </label>
+      </div>
+
+      <p class="group-label">Scope &amp; price</p>
+      <label class="field">
+        <span>Scope of work <em>— one deliverable per line; leave empty to use the defaults for the service</em></span>
+        <textarea id="scopeInput" rows="7" placeholder="Homepage + product catalog&#10;Shopping cart &amp; secure checkout&#10;Payment setup — Stripe &amp; PayPal"></textarea>
+      </label>
+      <div class="field-row price-row">
+        <label class="field">
+          <span>Price</span>
+          <input type="number" id="priceInput" min="0" step="1" placeholder="e.g. 1450">
+        </label>
+        <label class="field">
+          <span>Currency</span>
+          <select id="currencySelect">
+            <option value="USD">USD ($)</option>
+            <option value="GBP">GBP (£)</option>
+            <option value="EUR">EUR (€)</option>
+            <option value="AUD">AUD (A$)</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Billing</span>
+          <select id="billingSelect">
+            <option value="one-time">One-time project</option>
+            <option value="monthly">Monthly retainer</option>
+          </select>
+        </label>
+      </div>
+      <p class="field-hint" id="priceHint">Add a price to see totals, deposit and the payment schedule.</p>
+
+      <div class="field-row two">
+        <label class="field">
+          <span>Discount (%)</span>
+          <input type="number" id="discountInput" min="0" max="100" step="1" value="0">
+        </label>
+        <label class="field">
+          <span>Payment terms</span>
+          <select id="paymentTerms">
+            <option value="50-50">50% upfront, 50% on delivery</option>
+            <option value="100-upfront">100% upfront</option>
+            <option value="30-40-30">30% / 40% / 30% milestones</option>
+            <option value="net-14">100% on delivery (Net 14)</option>
+          </select>
+        </label>
+      </div>
+      <div class="field-row two">
+        <label class="field">
+          <span>Duration (weeks)</span>
+          <input type="number" id="durationWeeks" min="1" max="52" step="1" value="4">
+        </label>
+        <label class="field">
+          <span>Start date</span>
+          <input type="date" id="startDate">
+        </label>
+      </div>
+
+      <div class="sample-row">
+        <span class="sample-label">Try a sample:</span>
+        <button type="button" class="chip" data-sample="store">Online store website</button>
+        <button type="button" class="chip" data-sample="social">Social media management</button>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn btn-primary" id="generateBtn">Generate proposal</button>
+        <button type="button" class="btn btn-ghost" id="resetBtn">Reset</button>
+      </div>
+      <p class="privacy-note">Nothing leaves your browser. No upload, no account — the proposal is built locally and only exists in this tab.</p>
+    </div>
+
+    <div class="panel output-panel">
+      <div class="panel-head">
+        <h2>Your proposal</h2>
+        <span class="panel-hint" id="outputHint">Waiting for your details</span>
+      </div>
+
+      <div class="empty-state" id="emptyState">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+        <p><strong>No proposal yet.</strong></p>
+        <p>Fill in the details on the left — or load one of the two samples — then hit <strong>Generate proposal</strong>. After that, every edit updates the document live.</p>
+      </div>
+
+      <div class="results" id="results" hidden>
+        <div class="stats">
+          <div class="stat"><span class="stat-num" id="statTotal">–</span><span class="stat-label">Total</span></div>
+          <div class="stat"><span class="stat-num" id="statDueNow">–</span><span class="stat-label">Due now</span></div>
+          <div class="stat"><span class="stat-num" id="statWeeks">–</span><span class="stat-label">Timeline</span></div>
+          <div class="stat"><span class="stat-num" id="statItems">–</span><span class="stat-label">Deliverables</span></div>
+        </div>
+
+        <div id="proposalDoc"></div>
+
+        <div class="export-bar">
+          <button type="button" class="btn btn-dark" id="copyBtn">Copy proposal</button>
+          <button type="button" class="btn" id="downloadTxtBtn">Download .txt</button>
+          <button type="button" class="btn" id="downloadMdBtn">Download .md</button>
+          <button type="button" class="btn" id="printBtn">Print / PDF</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="how" id="how">
+    <h2>How it works</h2>
+    <div class="steps">
+      <div class="step">
+        <span class="step-num">1</span>
+        <h3>Fill in the details</h3>
+        <p>Client, project title, scope and price. Pick a service type and the scope defaults fill themselves in — edit them to match the real job.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">2</span>
+        <h3>Generate &amp; fine-tune live</h3>
+        <p>One click builds the full document: cover, scope, timeline, pricing with deposit math, and terms. Change anything and the preview updates as you type.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">3</span>
+        <h3>Send it</h3>
+        <p>Copy the whole proposal, download it as .txt or .md, or print it straight to PDF — then paste it into your email or chat with the client.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <h2>Good to know</h2>
+    <div class="faq-grid">
+      <div class="faq-item">
+        <h3>Is this a legal document?</h3>
+        <p>No. This is a sample template to get you started. The terms are examples — review them (or have a lawyer look at them) before using them with a real client.</p>
+      </div>
+      <div class="faq-item">
+        <h3>How is the price calculated?</h3>
+        <p>The total is your price minus any discount. The payment schedule then splits it by your chosen terms — 50/50, 100% upfront, 30/40/30 milestones, or Net 14 — so the deposit is always right.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What if I leave the scope empty?</h3>
+        <p>The service type you picked supplies a sensible default scope. Add, remove or rewrite lines — one deliverable per line, up to 12.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Is my client data stored anywhere?</h3>
+        <p>No. Everything in this demo runs locally in your browser. Close the tab and it is gone.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <span><strong>ProposalKit</strong> — AI Proposal &amp; Quote Generator</span>
+    <span class="footer-note">Demo with sample data. Client names, prices and terms shown are fictional examples, not real proposals.</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
