@@ -2,12 +2,23 @@
    Pure proposal logic (buildProposal, renderers) is kept DOM-free so it
    can be smoke-tested in Node; the browser wiring lives in init(). */
 
+/* NOTE: data.js declares SERVICE_TYPES etc. as top-level consts in the
+   shared global scope when both files load as classic <script> tags.
+   Destructuring them into same-named consts here used to throw
+   "Identifier 'SERVICE_TYPES' has already been declared" at load time,
+   which killed the whole script (no init, every button inert).
+   So the bindings below use K_ names to avoid the collision. */
 const DATA =
   typeof module !== "undefined" && typeof require === "function"
     ? require("./data.js")
     : { SERVICE_TYPES, PAYMENT_TERMS, TONES, CURRENCIES, SAMPLES, round2 };
 
-const { SERVICE_TYPES, PAYMENT_TERMS, TONES, CURRENCIES, SAMPLES, round2 } = DATA;
+const K_SERVICE_TYPES = DATA.SERVICE_TYPES;
+const K_PAYMENT_TERMS = DATA.PAYMENT_TERMS;
+const K_TONES = DATA.TONES;
+const K_CURRENCIES = DATA.CURRENCIES;
+const K_SAMPLES = DATA.SAMPLES;
+const kRound2 = DATA.round2;
 
 /* ---------------- helpers ---------------- */
 
@@ -33,12 +44,12 @@ function parseScope(text, serviceType) {
     .filter(Boolean)
     .slice(0, 12);
   if (lines.length > 0) return lines;
-  const svc = SERVICE_TYPES[serviceType] || SERVICE_TYPES.custom;
+  const svc = K_SERVICE_TYPES[serviceType] || K_SERVICE_TYPES.custom;
   return svc.defaultScope.slice();
 }
 
 function formatMoney(amount, currencyCode) {
-  const c = CURRENCIES[currencyCode] || CURRENCIES.USD;
+  const c = K_CURRENCIES[currencyCode] || K_CURRENCIES.USD;
   return new Intl.NumberFormat(c.locale, {
     style: "currency",
     currency: c.code,
@@ -110,9 +121,9 @@ function buildPhases(startDate, durationWeeks, phaseNames) {
 
 function buildProposal(input) {
   const today = input.today instanceof Date ? input.today : new Date();
-  const service = SERVICE_TYPES[input.serviceType] || SERVICE_TYPES.custom;
-  const tone = TONES[input.tone] || TONES.professional;
-  const terms = PAYMENT_TERMS[input.paymentTerms] || PAYMENT_TERMS["50-50"];
+  const service = K_SERVICE_TYPES[input.serviceType] || K_SERVICE_TYPES.custom;
+  const tone = K_TONES[input.tone] || K_TONES.professional;
+  const terms = K_PAYMENT_TERMS[input.paymentTerms] || K_PAYMENT_TERMS["50-50"];
 
   const senderName = (input.senderName || "").trim() || "Aqua Ter";
   const senderBusiness = (input.senderBusiness || "").trim() || "Aqua Ter — Web & AI Services";
@@ -125,15 +136,15 @@ function buildProposal(input) {
   const discountPct = clampNum(input.discount, 0, 100, 0);
   const price = Math.max(0, Number(input.price) || 0);
   const billing = input.billing === "monthly" ? "monthly" : "one-time";
-  const currency = CURRENCIES[input.currency] ? input.currency : "USD";
+  const currency = K_CURRENCIES[input.currency] ? input.currency : "USD";
 
   const scope = parseScope(input.scopeText, input.serviceType);
   const phases = buildPhases(startDate, durationWeeks, service.phases);
   const endDate = phases.length ? phases[phases.length - 1].end : addDays(startDate, durationWeeks * 7 - 1);
 
-  const subtotal = round2(price);
-  const discountAmt = round2((subtotal * discountPct) / 100);
-  const total = round2(subtotal - discountAmt);
+  const subtotal = kRound2(price);
+  const discountAmt = kRound2((subtotal * discountPct) / 100);
+  const total = kRound2(subtotal - discountAmt);
   const schedule = terms.schedule(total);
   const dueNow = schedule.length ? schedule[0].amount : total;
 
@@ -439,7 +450,7 @@ function fileBase(p) {
 }
 
 function loadSample(key) {
-  const s = SAMPLES[key];
+  const s = K_SAMPLES[key];
   if (!s) return;
   $("senderName").value = s.senderName;
   $("senderBusiness").value = s.senderBusiness;
